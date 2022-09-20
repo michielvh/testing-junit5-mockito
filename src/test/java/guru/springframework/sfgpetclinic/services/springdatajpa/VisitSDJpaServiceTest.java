@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,5 +91,71 @@ class VisitSDJpaServiceTest {
 
         verify(visitRepository).deleteById(any(Long.class));
         verify(visitRepository).deleteById(anyLong());
+    }
+
+    @DisplayName("Test Find All BDD")
+    @Test
+    void findAllBdd() {
+        //given
+        Visit visit = new Visit();
+        Set<Visit> visits = new HashSet<>();
+        visits.add(visit);
+        given(visitRepository.findAll()).willReturn(visits);
+
+        //when
+        Set<Visit> foundVisits = service.findAll();
+
+        //then
+        then(visitRepository).should().findAll();
+        assertThat(foundVisits).hasSize(1);
+    }
+
+    @Test
+    void findByIdBdd() {
+        //given
+        Visit visit = new Visit();
+        given(visitRepository.findById(anyLong())).willReturn(Optional.of(visit));
+
+        //when
+        Visit foundVisit = service.findById(1L);
+
+        //then
+        then(visitRepository).should().findById(anyLong());
+        assertThat(foundVisit).isNotNull();
+    }
+
+    @Test
+    void saveBdd() {
+        //given
+        Visit visit = new Visit();
+        given(visitRepository.save(any(Visit.class))).willReturn(visit);
+
+        //when
+        Visit savedVisit = service.save(new Visit());
+
+        //then
+        then(visitRepository).should().save(any(Visit.class));
+        assertThat(savedVisit).isNotNull();
+    }
+
+    @Test
+    void deleteBdd() {
+        //given
+        Visit visit = new Visit();
+
+        //when
+        service.delete(visit);
+
+        //then
+        then(visitRepository).should().delete(any(Visit.class));
+    }
+
+    @Test
+    void deleteByIdBdd() {
+        //when
+        service.deleteById(1L);
+
+        //then
+        then(visitRepository).should().deleteById(anyLong());
     }
 }
