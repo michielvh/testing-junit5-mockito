@@ -14,6 +14,7 @@ import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
@@ -50,6 +51,21 @@ class SpecialitySDJpaServiceTest {
         verify(specialtyRepository,times(1)).findById(1L);
     }
 
+    @Test
+    void findByIdBddTest() {
+
+        Speciality speciality = new Speciality();
+
+        // BDD , written differently
+        given(specialtyRepository.findById(1L)).willReturn(Optional.of(speciality));
+
+        Speciality foundSpeciality = service.findById(1L);
+
+        assertThat(foundSpeciality).isNotNull();
+
+        verify(specialtyRepository,times(1)).findById(1L);
+
+    }
 
     @Test
     void deleteById() {
