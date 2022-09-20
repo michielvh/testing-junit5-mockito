@@ -11,6 +11,12 @@ import guru.springframework.sfgpetclinic.model.Speciality;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialitySDJpaServiceTest {
@@ -28,8 +34,41 @@ class SpecialitySDJpaServiceTest {
     @Test
     void deleteById() {
         service.deleteById(1l);
+        service.deleteById(1l);
+       // service.delete(new Speciality());
+
+        verify(specialtyRepository,times(2)).deleteById(1l);
+        //verify(specialtyRepository,times(1)).delete(any());
     }
 
+    @Test
+    void deleteByIdAtLeast() {
+        service.deleteById(1l);
+        service.deleteById(1l);
+
+        verify(specialtyRepository,atLeastOnce()).deleteById(1l);
+    }
+
+    @Test
+    void deleteByIdAtMost() {
+        service.deleteById(1l);
+        service.deleteById(1l);
+
+        verify(specialtyRepository,atMost(5)).deleteById(1l);
+    }
+
+
+    @Test
+    void deleteByIdNever() {
+        service.deleteById(1l);
+        service.deleteById(1l);
+
+        verify(specialtyRepository,atMost(5)).deleteById(1l);
+
+
+        // mock gets called never with this method+param
+        verify(specialtyRepository,never()).deleteById(5l);
+    }
     @Test
     void testDelete() {
 
