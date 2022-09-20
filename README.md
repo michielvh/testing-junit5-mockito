@@ -1,11 +1,18 @@
 # OWN Comments
 
-## Importent senctions : 
+## Importent sections : 
 - commit 3 : shows the right usage of verify
   - We ALLWAYS verify a MOCK-OBJECT , NOT the service which uses the Mock-object
   - we test a service which uses a Mock repository  (service itself is not a mock)
     - f.e: service.deleteById(1l)
             verify(MOCK-REPO).deleteById(1l)
+
+- commit 5 : shows the right usage of when
+  - We use When on a MOCK-OBJECT
+  - we create a new object that the mock object returns when a method is called - MOCKOBJECT itself cannot return anything
+  - we call our service which uses the mock
+  - we verify that MockObject returns Pre-made Object
+  - we verify that the mock-object-method is called (right number of times)
 
 
 
